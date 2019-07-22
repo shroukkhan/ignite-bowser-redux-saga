@@ -1,55 +1,81 @@
-import { onSnapshot } from "mobx-state-tree"
-import { RootStoreModel, RootStore } from "./root-store"
-import { Environment } from "../environment"
-import * as storage from "../../utils/storage"
+import { applyMiddleware, compose, createStore } from "redux"
+import Rehydration from "../../services/storage/rehydration"
+import ReduxPersist from "../../config/redux-persist"
+import createSagaMiddleware from "redux-saga"
+import ScreenTracking from "../../services/navigation/screen-tracking-middleware"
+import { createReactNavigationReduxMiddleware } from "react-navigation-redux-helpers"
+import { composeWithDevTools } from "redux-devtools-extension"
+import { createLogger } from "redux-logger"
+import * as R from "ramda"
 
-/**
- * The key we'll be saving our state as within async storage.
- */
-const ROOT_STATE_STORAGE_KEY = "root"
+let _store
 
-/**
- * Setup the environment that all the models will be sharing.
- *
- * The environment includes other functions that will be picked from some
- * of the models that get created later. This is how we loosly couple things
- * like events between models.
- */
-export async function createEnvironment() {
-  const env = new Environment()
-  await env.setup()
-  return env
+// creates the store
+export default (rootReducer, rootSaga) => {
+  /* ------------- Redux Configuration ------------- */
+
+  const middleware = []
+  const enhancers = []
+
+  /* ------------- Navigation Middleware ------------ */
+  const navigationMiddleware = createReactNavigationReduxMiddleware(
+    (state: { nav: any }) => state.nav,
+    "root",
+  )
+  middleware.push(navigationMiddleware)
+
+  /* ------------- Logger Middleware ------------- */
+
+  if (__DEV__) {
+    const SAGA_LOGGING_BLACKLIST = ["EFFECT_TRIGGERED", "EFFECT_RESOLVED", "EFFECT_REJECTED",
+      "Navigation/MARK_DRAWER_SETTLING",
+      "Navigation/MARK_DRAWER_IDLE",
+      "Navigation/DRAWER_CLOSED",
+      "Navigation/COMPLETE_TRANSITION",
+    ]
+    const logger = createLogger({
+      predicate: (getState, { type }) => R.not(R.contains(type, SAGA_LOGGING_BLACKLIST)),
+    })
+    middleware.push(logger)
+  }
+
+  /* ------------- Analytics Middleware ------------- */
+  middleware.push(ScreenTracking)
+
+  /* ------------- Saga Middleware ------------- */
+
+  const sagaMonitor = window["__SAGA_MONITOR_EXTENSION__"]
+  const sagaMiddleware = createSagaMiddleware({ sagaMonitor })
+  middleware.push(sagaMiddleware)
+
+  /* ------------- Assemble Middleware ------------- */
+
+  enhancers.push(applyMiddleware(...middleware))
+
+  const store = createStore(rootReducer, composeWithDevTools(compose(...enhancers)))
+
+  // configure persistStore and check reducer version number
+  if (ReduxPersist.active) {
+    Rehydration.updateReducers(store)
+  }
+
+  // kick off root saga
+  let sagasManager = sagaMiddleware.run(rootSaga)
+  _store = store
+  return {
+    store,
+    sagasManager,
+    sagaMiddleware,
+  }
 }
 
+export const getStore = () => _store
 /**
- * Setup the root state.
+ * Set a mock store used in unit testing
+ * @param store
+ * @returns {*}
  */
-export async function setupRootStore() {
-  let rootStore: RootStore
-  let data: any
-
-  // prepare the environment that will be associated with the RootStore.
-  const env = await createEnvironment()
-  try {
-    // load data from storage
-    data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || {}
-    rootStore = RootStoreModel.create(data, env)
-  } catch (e) {
-    // if there's any problems loading, then let's at least fallback to an empty state
-    // instead of crashing.
-    rootStore = RootStoreModel.create({}, env)
-
-    // but please inform us what happened
-    __DEV__ && console.tron.error(e.message, null)
-  }
-
-  // reactotron logging
-  if (__DEV__) {
-    env.reactotron.setRootStore(rootStore, data)
-  }
-
-  // track changes & save to storage
-  onSnapshot(rootStore, snapshot => storage.save(ROOT_STATE_STORAGE_KEY, snapshot))
-
-  return rootStore
+export const setMockStore = (store) => {
+  console.warn("- Setting mock store -")
+  _store = store
 }

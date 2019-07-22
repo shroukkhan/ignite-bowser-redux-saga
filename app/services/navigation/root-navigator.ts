@@ -1,9 +1,9 @@
 import { createStackNavigator } from "react-navigation"
-import { PrimaryNavigator } from "./primary-navigator"
+import { AppNavigation } from "./app-navigation"
 
 export const RootNavigator = createStackNavigator(
   {
-    primaryStack: { screen: PrimaryNavigator },
+    primaryStack: { screen: AppNavigation },
   },
   {
     headerMode: "none",
