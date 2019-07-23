@@ -2,7 +2,12 @@ import * as React from "react"
 import { BackHandler, Platform } from "react-native"
 import { createReactNavigationReduxMiddleware, createReduxContainer } from "react-navigation-redux-helpers"
 import { connect } from "react-redux"
-import { AppNavigation } from "./app-navigation"
+import  AppNavigation  from "./app-navigation"
+
+export const reducer = (state, action) => {
+  const newState = AppNavigation.router.getStateForAction(action, state)
+  return newState || state
+}
 
 createReactNavigationReduxMiddleware(
   (state: { nav: any }) => state.nav,

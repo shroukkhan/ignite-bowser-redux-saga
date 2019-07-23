@@ -7,6 +7,7 @@ import ReduxPersist from "../../config/redux-persist"
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
   startup: require("../../services/appstart/startup-redux").reducer,
+  nav:require("../../services/navigation/redux-nagivation").reducer
 })
 
 export default () => {

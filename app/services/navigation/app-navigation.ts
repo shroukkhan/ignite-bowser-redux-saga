@@ -1,13 +1,16 @@
 import { createStackNavigator } from "react-navigation"
-import { WelcomeScreen } from "../../screens/welcome-screen"
-import { DemoScreen } from "../../screens/demo-screen"
+import { createAppContainer } from "@react-navigation/native"
+import { PromotionFullPageScreen, PromotionHalfPageScreen, PromotionPopupScreen } from "../../screens/promotion-screen"
 
-export const AppNavigation = createStackNavigator(
+const AppNavigation = createStackNavigator(
   {
-    welcome: { screen: WelcomeScreen },
-    demo: { screen: DemoScreen },
+    PromotionFullPageScreen: { screen: PromotionFullPageScreen },
+    PromotionHalfPageScreen: { screen: PromotionHalfPageScreen },
+    PromotionPopupScreen: { screen: PromotionPopupScreen },
   },
   {
     headerMode: "none",
   },
 )
+
+export default createAppContainer(AppNavigation)
