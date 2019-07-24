@@ -5,22 +5,21 @@ import { connect } from "react-redux"
 import StartupActions from "./services/appstart/startup-redux"
 import ReduxPersist from "./config/redux-persist"
 
-class RootContainer extends Component <{
+class RootContainer extends Component<{
   startup: () => void
 }> {
-
-  componentDidMount() {
+  public componentDidMount() {
     // if redux persist is not active fire startup action
     if (!ReduxPersist.active) {
       this.props.startup()
     }
   }
 
-  render() {
+  public render() {
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar barStyle='dark-content'/>
-        <ReduxNavigation/>
+        <StatusBar barStyle="dark-content" />
+        <ReduxNavigation />
       </View>
     )
   }

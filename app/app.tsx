@@ -8,17 +8,15 @@ import { StorybookUIRoot } from "../storybook"
 import React, { Component } from "react"
 import { Provider } from "react-redux"
 import RootContainer from "./root-container"
-import createStore from "./models/root-store/root-redux"
+import createStore from "./services/root-store/root-redux"
 
 const store = createStore()
 
-
-
 class App extends Component {
-  render() {
+  public render() {
     return (
       <Provider store={store}>
-        <RootContainer/>
+        <RootContainer />
       </Provider>
     )
   }

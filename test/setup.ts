@@ -5,7 +5,6 @@ import "react-native"
 import "./mock-async-storage"
 import "./mock-i18n"
 import "./mock-react-native-localize"
-import "./mock-reactotron"
 import "./mock-textinput"
 
 declare global {

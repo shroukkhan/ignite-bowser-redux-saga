@@ -1,24 +1,18 @@
 import * as React from "react"
-import { ViewStyle } from "react-native"
-import { Text } from "../../components/text"
-import { Screen } from "../../components/screen"
-import { color } from "../../theme"
+import { Text, View } from "react-native"
+
 import { NavigationScreenProps } from "react-navigation"
 
-export interface PromotionFullPageScreenProps extends NavigationScreenProps<{}> {
-}
-
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+export interface IPromotionFullPageScreenProps extends NavigationScreenProps<{}> {
 }
 
 
-export class PromotionFullPageScreen extends React.Component<PromotionFullPageScreenProps, {}> {
-  render () {
+export class PromotionFullPageScreen extends React.Component<IPromotionFullPageScreenProps, {}> {
+  public render () {
     return (
-      <Screen style={ROOT} preset="scroll">
-        <Text preset="header" tx="PromotionHalfPageScreen.header" />
-      </Screen>
+      <View style={{ flex: 1 }}>
+        <Text>PromotionHalfPageScreen</Text>
+      </View>
     )
   }
 }
