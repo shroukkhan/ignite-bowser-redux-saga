@@ -8,6 +8,7 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import { createLogger } from "redux-logger"
 import * as R from "ramda"
 
+// tslint:disable-next-line
 let _store
 
 // creates the store
@@ -44,6 +45,7 @@ export default (rootReducer, rootSaga) => {
 
   /* ------------- Saga Middleware ------------- */
 
+  // tslint:disable-next-line
   const sagaMonitor = window["__SAGA_MONITOR_EXTENSION__"]
   const sagaMiddleware = createSagaMiddleware({ sagaMonitor })
   middleware.push(sagaMiddleware)
@@ -60,7 +62,7 @@ export default (rootReducer, rootSaga) => {
   }
 
   // kick off root saga
-  let sagasManager = sagaMiddleware.run(rootSaga)
+  const sagasManager = sagaMiddleware.run(rootSaga)
   _store = store
   return {
     store,

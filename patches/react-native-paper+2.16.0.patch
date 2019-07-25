@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-paper/typings/components/TouchableRipple.d.ts b/node_modules/react-native-paper/typings/components/TouchableRipple.d.ts
+index aee1b34..4c1c379 100644
+--- a/node_modules/react-native-paper/typings/components/TouchableRipple.d.ts
++++ b/node_modules/react-native-paper/typings/components/TouchableRipple.d.ts
+@@ -10,7 +10,7 @@ interface TouchableRipplePropsWithoutChildren extends TouchableHighlightProps, T
+ }
+ 
+ export interface TouchableRippleProps extends TouchableRipplePropsWithoutChildren {
+-  children: React.ReactNode;
++  children ?: React.ReactNode;
+ }
+ 
+ export declare class TouchableRipple extends React.Component<TouchableRippleProps> {

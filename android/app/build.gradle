@@ -188,6 +188,9 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_geolocation')
+    implementation project(':react-native-deviceinfo')
+    implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-localize')

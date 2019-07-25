@@ -8,6 +8,8 @@ import ReduxPersist from "../../config/redux-persist"
 export const reducers = combineReducers({
   startup: require("../appstart/startup-redux").reducer,
   nav: require("../navigation/redux-nagivation").reducer,
+  account: require("../../screens/account-screen/account-redux").reducer,
+  location:require("../location/location-redux").reducer
 })
 
 export default () => {

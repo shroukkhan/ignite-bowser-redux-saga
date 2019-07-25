@@ -53,3 +53,4 @@ ios/Pods
 
 # CocoaPods
 /ios/Pods/
+__scripts__/generators

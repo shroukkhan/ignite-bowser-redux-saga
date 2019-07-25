@@ -1,9 +1,11 @@
 import React, { Component } from "react"
-import { StatusBar, View } from "react-native"
+import { StatusBar } from "react-native"
 import ReduxNavigation from "./services/navigation/redux-nagivation"
 import { connect } from "react-redux"
 import StartupActions from "./services/appstart/startup-redux"
 import ReduxPersist from "./config/redux-persist"
+import { Provider as PaperProvider } from "react-native-paper"
+import ApplicationThemes from "./theme/theme"
 
 class RootContainer extends Component<{
   startup: () => void
@@ -17,10 +19,10 @@ class RootContainer extends Component<{
 
   public render() {
     return (
-      <View style={{ flex: 1 }}>
+      <PaperProvider theme={ApplicationThemes}>
         <StatusBar barStyle="dark-content" />
         <ReduxNavigation />
-      </View>
+      </PaperProvider>
     )
   }
 }
